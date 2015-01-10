@@ -15,3 +15,23 @@
 每一个App都会要单独去写他的入口。但是这个入口对于线上来说又是一个无用的东西。
 
 本项目就这样子产生了。
+
+# 使用方法
+
+```java
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    ServiceLocation.DEBUG = false;
+    ServiceLocation.startFloat(this, "http://www.baidu.com");
+    this.initView();
+}
+```
+
+```java
+@Override
+protected void onDestroy() {
+    ServiceLocation.stopFloat(this);
+    super.onDestroy();
+}
+```
