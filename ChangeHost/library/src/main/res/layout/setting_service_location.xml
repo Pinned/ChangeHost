@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="46dip"
+        android:background="@android:color/holo_blue_light">
+
+        <TextView
+            android:id="@+id/sub_title_bar_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:clickable="true"
+            android:gravity="center"
+            android:maxEms="12"
+            android:singleLine="true"
+            android:text="设置Service地址"
+            android:textColor="@android:color/white"
+            android:textSize="16dip" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:divider="@drawable/divider"
+        android:padding="15dip"
+        android:showDividers="middle">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Host地址:"
+            android:textColor="@android:color/black"
+            android:textSize="16dip" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/host"
+            android:text="http://www.baidu.com"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="http://demo.thering.cn/ding-server"
+            android:id="@+id/host_input"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:divider="@drawable/divider"
+        android:padding="15dip"
+        android:showDividers="middle">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Port:"
+            android:textColor="@android:color/black"
+            android:textSize="16dip" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/port"
+            android:text="8080"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/port_input"/>
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dip"
+        android:text="提交"
+        android:onClick="submit"
+        android:background="@drawable/submit_bg"/>
+
+</LinearLayout>
