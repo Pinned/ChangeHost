@@ -17,6 +17,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ServiceLocation.DEBUG = false;
         ServiceLocation.startFloat(this, "http://www.baidu.com");
         this.initView();
     }

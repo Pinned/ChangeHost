@@ -18,6 +18,8 @@ public class ServiceLocation {
     public static Intent floatIntent;
     private static DataCleanListener dataCleanListener = null;
 
+    public static boolean DEBUG = false;
+
     public static void startFloat(Context context) {
         startFloat(context, "http://10.0.0.2");
     }
@@ -25,6 +27,9 @@ public class ServiceLocation {
     public static void startFloat(Context context, String defaultHost) {
         ServiceLocationTools.init(context, defaultHost);
         FloatItemManager.init(context);
+        if (!DEBUG) {
+            return;
+        } // end if
         if (floatIntent == null) {
             floatIntent = new Intent(context, FloatItemService.class);
         } // end if
