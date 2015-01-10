@@ -47,7 +47,6 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="http://demo.thering.cn/ding-server"
             android:id="@+id/host_input"/>
     </LinearLayout>
 
