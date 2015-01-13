@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.knero.library.R;
@@ -32,6 +33,7 @@ public class ServiceLocationSettingActivity extends Activity {
 
 
     private TextView mHostShow;
+    private Spinner mHostSpinner;
     private EditText mHostInput;
     private String mCurrentHost;
 
@@ -56,6 +58,7 @@ public class ServiceLocationSettingActivity extends Activity {
 
         this.mHostShow = (TextView) this.findViewById(R.id.host);
         this.mHostInput = (EditText) this.findViewById(R.id.host_input);
+        this.mHostSpinner = (Spinner) this.findViewById(R.id.host_spinner);
 
         this.mPortShow = (TextView) this.findViewById(R.id.port);
         this.mPortInput = (TextView) this.findViewById(R.id.port_input);
@@ -75,7 +78,6 @@ public class ServiceLocationSettingActivity extends Activity {
                 .setTitle("Warm")
                 .setMessage("你没有修改任何信息，无需保存")
                 .setNegativeButton("确认", new DialogInterface.OnClickListener() {
-
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
