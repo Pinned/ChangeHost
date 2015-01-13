@@ -8,9 +8,15 @@ import android.util.Log;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Properties;
+import java.util.Scanner;
+import java.util.Set;
 
 /**
  * Created by knero on 1/8/2015.
@@ -20,7 +26,7 @@ public class ServiceLocationTools {
     private static ServiceLocationTools instance;
 
     public static void init(Context context, String defaultHost) {
-        instance = new ServiceLocationTools(context, defaultHost, "");
+        init(context, defaultHost, "");
     }
 
     public static void init(Context context, String defaultHost, String defaultPort) {
@@ -36,18 +42,31 @@ public class ServiceLocationTools {
     public String currentHost;
     public String currentPort;
     private String fileLocation;
+    private String historyFiles;
+
+    private Set<String> urls;
 
     public ServiceLocationTools(Context context, String defaultHost, String defaultPort) {
         try {
-            fileLocation = "/data/data/" +
-                    context.getPackageManager().getPackageInfo(context.getPackageName(), 0).packageName
-                    + "/location.properties";
+            String packageName = context.getPackageManager()
+                    .getPackageInfo(context.getPackageName(), 0).packageName;
+            fileLocation = "/data/data/" + packageName + "/location.properties";
+            historyFiles = "/data/data/" + packageName + "/allurl.txt";
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
         Properties props = loadProperties();
         currentHost = props.getProperty(HOST, defaultHost);
         currentPort = props.getProperty(PORT, defaultPort);
+        urls = new HashSet<String>();
+        try {
+            Scanner scanner = new Scanner(new File(historyFiles));
+            while (scanner.hasNext()) {
+                urls.add(scanner.nextLine());
+            }
+        } catch (Exception e) {
+        }
+        saveToHistory();
     }
 
     public void setDefaultHost(String host) {
@@ -64,6 +83,8 @@ public class ServiceLocationTools {
         this.currentHost = host;
         if (!TextUtils.isEmpty(port)) {
             this.currentPort = port;
+        } else {
+            this.currentPort = "0";
         }
         storeProperties();
     }
@@ -84,6 +105,22 @@ public class ServiceLocationTools {
             Log.d("TAG", loadProperties().getProperty(HOST, ""));
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        saveToHistory();
+    }
+
+    private void saveToHistory() {
+        urls.add(getUrl());
+        try {
+            FileWriter fw = new FileWriter(new File(historyFiles));
+            for (String url : urls) {
+                fw.write(url);
+                fw.write("\r\n");
+            }
+            fw.flush();
+            fw.close();
+        }catch (Exception e) {
+
         }
     }
 
@@ -127,6 +164,10 @@ public class ServiceLocationTools {
             sb.append(port);
         }
         return sb.toString();
+    }
+
+    public Set<String> getHistoryUrls() {
+        return urls;
     }
 
 }

@@ -36,6 +36,29 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="历史记录"
+            android:textColor="@android:color/black"
+            android:textSize="16dip" />
+
+        <Spinner
+            android:id="@+id/host_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </Spinner>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:divider="@drawable/divider"
+        android:padding="15dip"
+        android:showDividers="middle">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="Host地址:"
             android:textColor="@android:color/black"
             android:textSize="16dip" />
@@ -47,24 +70,11 @@
             android:inputType="textUri"
             android:text="http://www.baidu.com" />
 
-        <Spinner
-            android:id="@+id/host_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </Spinner>
-
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/host_input" />
     </LinearLayout>
-
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinner"
-        android:layout_gravity="right" />
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -8,7 +8,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -17,6 +21,10 @@ import com.knero.library.ServiceLocation;
 import com.knero.library.tools.DataCleanListener;
 import com.knero.library.tools.DataCleanManager;
 import com.knero.library.tools.ServiceLocationTools;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -37,6 +45,8 @@ public class ServiceLocationSettingActivity extends Activity {
     private EditText mHostInput;
     private String mCurrentHost;
 
+    private List<String> mUrls;
+
     private int mCurrentPort;
     private TextView mPortShow;
     private TextView mPortInput;
@@ -51,6 +61,8 @@ public class ServiceLocationSettingActivity extends Activity {
     private void initData() {
         mCurrentHost = ServiceLocationTools.getInstance().getHost();
         mCurrentPort = ServiceLocationTools.getInstance().getPort();
+        mUrls = new ArrayList<String>();
+        mUrls.addAll(ServiceLocationTools.getInstance().getHistoryUrls());
     }
 
     private void initView() {
@@ -71,6 +83,11 @@ public class ServiceLocationSettingActivity extends Activity {
         } else {
             this.mPortShow.setText("无端口号");
         }
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mUrls);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        this.mHostSpinner.setAdapter(adapter);
+        this.mHostSpinner.setSelection(mUrls.indexOf(ServiceLocationTools.getInstance().getUrl()), true);
     }
 
     private void notChanged() {
@@ -88,38 +105,61 @@ public class ServiceLocationSettingActivity extends Activity {
     }
 
     public void submit(View view) {
-        final String host = mHostInput.getText().toString();
-        final String port = mPortInput.getText().toString();
-        if (!TextUtils.isEmpty(host)) {
-            if (host.equals(mCurrentHost)) {
-                // 提示没有修改
-                notChanged();
-            } else {
-                // 提示要清除数据,并重启应用
-                AlertDialog alertDialog = new AlertDialog.Builder(this)
-                        .setTitle("修改Host地址")
-                        .setMessage("修改将会清除你所有的个人数据")
-                        .setNegativeButton("确认", new DialogInterface.OnClickListener() {
+        if (mHostSpinner.getSelectedItem().toString().equals(
+                ServiceLocationTools.getInstance().getUrl()
+        )) {
+            final String host = mHostInput.getText().toString();
+            final String port = mPortInput.getText().toString();
 
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                ServiceLocationTools.getInstance().setDefaultLocation(host, port);
-                                exitProgram();
-                            }
-
-                        })
-                        .setPositiveButton("取消", new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .create();
-                alertDialog.show();
+            if (!TextUtils.isEmpty(host)) {
+                if (parserUrl(host, port).equals(
+                        parserUrl(mCurrentHost,String.valueOf(mCurrentPort)))) {
+                    // 提示没有修改
+                    notChanged();
+                } else {
+                    changed(host, port);
+                }
             }
+        } else {
+            changed(mHostSpinner.getSelectedItem().toString(), "");
         }
+    }
+    private String parserUrl(String host, String port) {
+        StringBuffer sb = new StringBuffer();
+        if (host.startsWith("http")) {
+            sb.append(host);
+        } else {
+            sb.append("http://" + host);
+        }
+        if (!TextUtils.isEmpty(port)) {
+            sb.append(":");
+            sb.append(port);
+        }
+        return sb.toString();
+    }
+    private void changed(final String changeHost, final String changePort) {
+        // 提示要清除数据,并重启应用
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setTitle("修改Host地址")
+                .setMessage("修改将会清除你所有的个人数据")
+                .setNegativeButton("确认", new DialogInterface.OnClickListener() {
 
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ServiceLocationTools.getInstance().setDefaultLocation(changeHost, changePort);
+                        exitProgram();
+                    }
+
+                })
+                .setPositiveButton("取消", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        alertDialog.show();
     }
 
     private void exitProgram() {
