@@ -104,7 +104,11 @@ public class ServiceLocationTools {
     }
 
     public String getHost() {
-        return this.currentHost;
+        if (this.currentHost.startsWith("http")) {
+            return this.currentHost;
+        } else {
+            return String.format("http://%s",this.currentHost);
+        }
     }
 
     public int getPort() {
