@@ -65,6 +65,8 @@ public class ServiceLocationSettingActivity extends Activity {
         }
         if (mCurrentPort > 0) {
             this.mPortShow.setText(String.valueOf(mCurrentPort));
+        } else {
+            this.mPortShow.setText("无端口号");
         }
     }
 
